@@ -270,4 +270,531 @@
             border: none;
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.9);
-            font-
+            font-size: 1rem;
+        }
+        
+        .admin-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .admin-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-submit {
+            background: linear-gradient(to right, #11998e, #38ef7d);
+            color: white;
+        }
+        
+        .admin-cancel {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+        }
+        
+        .admin-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .admin-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .admin-controls {
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .admin-controls h3 {
+            color: #ffcc00;
+            margin-bottom: 15px;
+        }
+        
+        .admin-control-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        
+        .admin-control-label {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .admin-control-input {
+            flex: 2;
+            padding: 8px 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .admin-control-btn {
+            flex: 1;
+            padding: 8px 10px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(to right, #4A00E0, #8E2DE2);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>挂机升级游戏 - 中国地图解锁</h1>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-label">等级</div>
+                <div class="stat-value" id="level">1</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">经验值</div>
+                <div class="stat-value" id="exp">0</div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div>升级进度: <span id="currentExp">0</span> / <span id="requiredExp">100</span></div>
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button id="clickBtn">点击获得经验 (+20)</button>
+            <button id="levelUpBtn" disabled>升级 (需要100经验)</button>
+            <button id="autoBtn">开启挂机模式</button>
+        </div>
+        
+        <div class="auto-status" id="autoStatus">
+            挂机模式未开启
+        </div>
+        
+        <div class="maps-section">
+            <h3>已解锁地图</h3>
+            <div class="maps-container" id="mapsContainer">
+                <!-- 地图卡片将通过JavaScript动态生成 -->
+            </div>
+        </div>
+        
+        <div class="history">
+            <h3>游戏记录</h3>
+            <div id="historyLog"></div>
+        </div>
+        
+        <footer>
+            游戏进度会自动保存到本地存储 | 提示：连续点击等级5次可进入管理员模式
+        </footer>
+    </div>
+
+    <!-- 管理员系统 -->
+    <div class="admin-overlay" id="adminOverlay">
+        <div class="admin-panel">
+            <h2>管理员系统</h2>
+            <div class="admin-form" id="passwordForm">
+                <input type="password" class="admin-input" id="adminPassword" placeholder="请输入管理员密码">
+                <div class="admin-buttons">
+                    <button class="admin-btn admin-submit" id="adminSubmit">确认</button>
+                    <button class="admin-btn admin-cancel" id="adminCancel">取消</button>
+                </div>
+                <div id="adminMessage" style="margin-top: 15px; color: #ffcc00;"></div>
+            </div>
+            
+            <div class="admin-controls" id="adminControls">
+                <h3>开发者调试</h3>
+                <div class="admin-control-row">
+                    <div class="admin-control-label">当前等级:</div>
+                    <input type="number" class="admin-control-input" id="adminLevel" min="1" max="100">
+                    <button class="admin-control-btn" id="setLevelBtn">设置等级</button>
+                </div>
+                <div class="admin-control-row">
+                    <div class="admin-control-label">当前经验:</div>
+                    <input type="number" class="admin-control-input" id="adminExp" min="0" max="10000">
+                    <button class="admin-control-btn" id="setExpBtn">设置经验</button>
+                </div>
+                <div class="admin-control-row">
+                    <div class="admin-control-label">操作:</div>
+                    <button class="admin-control-btn" id="resetGameBtn">重置游戏</button>
+                    <button class="admin-control-btn" id="closeAdminBtn">关闭面板</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 游戏状态
+        const gameState = {
+            level: 1,
+            exp: 0,
+            autoMode: false,
+            history: [],
+            unlockedMaps: [1] // 初始解锁第一个地图
+        };
+
+        // 地图数据
+        const mapsData = [
+            { id: 1, name: "长城", levelRequired: 1, image: "linear-gradient(135deg, #8B4513, #D2691E)", description: "万里长城，中华文明的象征" },
+            { id: 2, name: "兵马俑", levelRequired: 5, image: "linear-gradient(135deg, #654321, #8B4513)", description: "秦始皇陵兵马俑，世界第八大奇迹" },
+            { id: 3, name: "故宫", levelRequired: 10, image: "linear-gradient(135deg, #B22222, #DC143C)", description: "紫禁城，明清两代皇家宫殿" },
+            { id: 4, name: "长江三峡", levelRequired: 15, image: "linear-gradient(135deg, #1E90FF, #4169E1)", description: "长江三峡，壮丽的自然景观" },
+            { id: 5, name: "黄山", levelRequired: 20, image: "linear-gradient(135deg, #228B22, #32CD32)", description: "黄山，天下第一奇山" },
+            { id: 6, name: "敦煌莫高窟", levelRequired: 25, image: "linear-gradient(135deg, #DAA520, #F4A460)", description: "莫高窟，佛教艺术宝库" },
+            { id: 7, name: "桂林山水", levelRequired: 30, image: "linear-gradient(135deg, #2E8B57, #3CB371)", description: "桂林山水甲天下" },
+            { id: 8, name: "布达拉宫", levelRequired: 35, image: "linear-gradient(135deg, #800000, #B22222)", description: "布达拉宫，世界屋脊的明珠" }
+        ];
+
+        // DOM元素
+        const levelElement = document.getElementById('level');
+        const expElement = document.getElementById('exp');
+        const currentExpElement = document.getElementById('currentExp');
+        const requiredExpElement = document.getElementById('requiredExp');
+        const progressBar = document.getElementById('progressBar');
+        const clickBtn = document.getElementById('clickBtn');
+        const levelUpBtn = document.getElementById('levelUpBtn');
+        const autoBtn = document.getElementById('autoBtn');
+        const autoStatus = document.getElementById('autoStatus');
+        const historyLog = document.getElementById('historyLog');
+        const mapsContainer = document.getElementById('mapsContainer');
+
+        // 管理员系统DOM元素
+        const adminOverlay = document.getElementById('adminOverlay');
+        const adminPassword = document.getElementById('adminPassword');
+        const adminSubmit = document.getElementById('adminSubmit');
+        const adminCancel = document.getElementById('adminCancel');
+        const adminMessage = document.getElementById('adminMessage');
+        const passwordForm = document.getElementById('passwordForm');
+        const adminControls = document.getElementById('adminControls');
+        const adminLevel = document.getElementById('adminLevel');
+        const adminExp = document.getElementById('adminExp');
+        const setLevelBtn = document.getElementById('setLevelBtn');
+        const setExpBtn = document.getElementById('setExpBtn');
+        const resetGameBtn = document.getElementById('resetGameBtn');
+        const closeAdminBtn = document.getElementById('closeAdminBtn');
+
+        // 管理员系统变量
+        let levelClickCount = 0;
+        let levelClickTimeout;
+        const ADMIN_PASSWORD = "831024";
+        let autoInterval = null;
+
+        // 初始化游戏
+        function initGame() {
+            // 从本地存储加载游戏状态
+            loadGame();
+            
+            // 绑定事件
+            clickBtn.addEventListener('click', () => addExp(20));
+            levelUpBtn.addEventListener('click', levelUp);
+            autoBtn.addEventListener('click', toggleAutoMode);
+            
+            // 等级点击事件 - 管理员系统入口
+            levelElement.addEventListener('click', handleLevelClick);
+            
+            // 管理员系统事件监听
+            adminSubmit.addEventListener('click', checkAdminPassword);
+            adminCancel.addEventListener('click', hideAdminPanel);
+            setLevelBtn.addEventListener('click', setLevel);
+            setExpBtn.addEventListener('click', setExp);
+            resetGameBtn.addEventListener('click', resetGame);
+            closeAdminBtn.addEventListener('click', hideAdminPanel);
+            
+            // 按Enter键提交密码
+            adminPassword.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    checkAdminPassword();
+                }
+            });
+            
+            // 更新UI
+            updateUI();
+            renderMaps();
+        }
+
+        // 从本地存储加载游戏状态
+        function loadGame() {
+            const savedGame = localStorage.getItem('idleGame');
+            if (savedGame) {
+                const parsedGame = JSON.parse(savedGame);
+                gameState.level = parsedGame.level || 1;
+                gameState.exp = parsedGame.exp || 0;
+                gameState.history = parsedGame.history || [];
+                gameState.unlockedMaps = parsedGame.unlockedMaps || [1];
+                
+                // 更新历史记录显示
+                updateHistory();
+            }
+        }
+
+        // 保存游戏状态到本地存储
+        function saveGame() {
+            localStorage.setItem('idleGame', JSON.stringify(gameState));
+        }
+
+        // 更新UI显示
+        function updateUI() {
+            levelElement.textContent = gameState.level;
+            expElement.textContent = gameState.exp;
+            currentExpElement.textContent = gameState.exp;
+            requiredExpElement.textContent = getRequiredExp();
+            
+            // 更新进度条
+            const progressPercent = (gameState.exp / getRequiredExp()) * 100;
+            progressBar.style.width = `${Math.min(progressPercent, 100)}%`;
+            
+            // 更新升级按钮状态
+            levelUpBtn.disabled = gameState.exp < getRequiredExp();
+            levelUpBtn.textContent = gameState.exp >= getRequiredExp() 
+                ? `升级 (消耗${getRequiredExp()}经验)` 
+                : `升级 (需要${getRequiredExp()}经验)`;
+                
+            // 更新挂机按钮状态
+            autoBtn.textContent = gameState.autoMode ? '关闭挂机模式' : '开启挂机模式';
+            autoStatus.textContent = gameState.autoMode 
+                ? '挂机模式运行中... 每秒获得5点经验' 
+                : '挂机模式未开启';
+        }
+
+        // 计算当前等级需要的经验值
+        function getRequiredExp() {
+            return 100; // 每级固定需要100经验
+        }
+
+        // 添加经验
+        function addExp(amount) {
+            gameState.exp += amount;
+            addToHistory(`获得了 ${amount} 点经验`);
+            updateUI();
+            saveGame();
+        }
+
+        // 升级
+        function levelUp() {
+            if (gameState.exp >= getRequiredExp()) {
+                const oldLevel = gameState.level;
+                gameState.exp -= getRequiredExp();
+                gameState.level++;
+                addToHistory(`升级到 ${gameState.level} 级！`);
+                
+                // 检查是否有新地图解锁
+                checkMapUnlocks(oldLevel);
+                
+                updateUI();
+                renderMaps();
+                saveGame();
+            }
+        }
+
+        // 检查地图解锁
+        function checkMapUnlocks(oldLevel) {
+            mapsData.forEach(map => {
+                // 如果玩家达到地图所需等级，并且之前没有解锁
+                if (gameState.level >= map.levelRequired && 
+                    oldLevel < map.levelRequired && 
+                    !gameState.unlockedMaps.includes(map.id)) {
+                    
+                    gameState.unlockedMaps.push(map.id);
+                    addToHistory(`解锁了新地图: ${map.name}！`);
+                }
+            });
+        }
+
+        // 渲染地图卡片
+        function renderMaps() {
+            mapsContainer.innerHTML = '';
+            
+            mapsData.forEach(map => {
+                const isUnlocked = gameState.unlockedMaps.includes(map.id);
+                const mapCard = document.createElement('div');
+                mapCard.className = `map-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+                
+                mapCard.innerHTML = `
+                    <div class="map-image" style="background: ${map.image}"></div>
+                    <div class="map-info">
+                        <div class="map-name">${map.name}</div>
+                        <div class="map-level">需要等级: ${map.levelRequired}</div>
+                    </div>
+                    ${!isUnlocked ? '<div class="lock-icon">🔒</div>' : ''}
+                `;
+                
+                mapsContainer.appendChild(mapCard);
+            });
+        }
+
+        // 切换挂机模式
+        function toggleAutoMode() {
+            gameState.autoMode = !gameState.autoMode;
+            
+            if (gameState.autoMode) {
+                addToHistory('开启了挂机模式');
+                autoInterval = setInterval(() => {
+                    addExp(5);
+                }, 1000);
+            } else {
+                addToHistory('关闭了挂机模式');
+                if (autoInterval) {
+                    clearInterval(autoInterval);
+                    autoInterval = null;
+                }
+            }
+            
+            updateUI();
+        }
+
+        // 添加到历史记录
+        function addToHistory(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            gameState.history.unshift(`${timestamp}: ${message}`);
+            
+            // 限制历史记录数量
+            if (gameState.history.length > 10) {
+                gameState.history.pop();
+            }
+            
+            updateHistory();
+        }
+
+        // 更新历史记录显示
+        function updateHistory() {
+            historyLog.innerHTML = '';
+            gameState.history.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.textContent = item;
+                historyLog.appendChild(historyItem);
+            });
+        }
+
+        // 管理员系统功能
+        function handleLevelClick() {
+            levelClickCount++;
+            
+            // 清除之前的超时
+            if (levelClickTimeout) {
+                clearTimeout(levelClickTimeout);
+            }
+            
+            // 设置新的超时
+            levelClickTimeout = setTimeout(() => {
+                levelClickCount = 0;
+            }, 2000); // 2秒内连续点击
+            
+            // 如果连续点击5次，显示管理员面板
+            if (levelClickCount >= 5) {
+                showAdminPanel();
+                levelClickCount = 0;
+            }
+        }
+
+        function showAdminPanel() {
+            adminOverlay.style.display = 'flex';
+            adminPassword.focus();
+        }
+
+        function hideAdminPanel() {
+            adminOverlay.style.display = 'none';
+            adminPassword.value = '';
+            adminMessage.textContent = '';
+            passwordForm.style.display = 'flex';
+            adminControls.style.display = 'none';
+            levelClickCount = 0;
+        }
+
+        function checkAdminPassword() {
+            const password = adminPassword.value.trim();
+            
+            if (password === ADMIN_PASSWORD) {
+                // 密码正确，显示管理员控制面板
+                passwordForm.style.display = 'none';
+                adminControls.style.display = 'block';
+                
+                // 填充当前数据
+                adminLevel.value = gameState.level;
+                adminExp.value = gameState.exp;
+                
+                addToHistory('进入了管理员模式');
+            } else {
+                // 密码错误
+                adminMessage.textContent = '密码错误，请重试！';
+                adminPassword.value = '';
+                adminPassword.focus();
+            }
+        }
+
+        function setLevel() {
+            const newLevel = parseInt(adminLevel.value);
+            if (newLevel >= 1 && newLevel <= 100) {
+                const oldLevel = gameState.level;
+                gameState.level = newLevel;
+                
+                // 检查是否有新地图解锁
+                checkMapUnlocks(oldLevel);
+                
+                updateUI();
+                renderMaps();
+                saveGame();
+                
+                adminMessage.textContent = `等级已设置为 ${newLevel}`;
+                
+                addToHistory(`管理员将等级设置为 ${newLevel}`);
+            } else {
+                adminMessage.textContent = '请输入有效的等级 (1-100)';
+            }
+        }
+
+        function setExp() {
+            const newExp = parseInt(adminExp.value);
+            if (newExp >= 0 && newExp <= 10000) {
+                gameState.exp = newExp;
+                updateUI();
+                saveGame();
+                
+                adminMessage.textContent = `经验值已设置为 ${newExp}`;
+                
+                addToHistory(`管理员将经验值设置为 ${newExp}`);
+            } else {
+                adminMessage.textContent = '请输入有效的经验值 (0-10000)';
+            }
+        }
+
+        function resetGame() {
+            if (confirm('确定要重置游戏吗？所有进度将丢失！')) {
+                gameState.level = 1;
+                gameState.exp = 0;
+                gameState.autoMode = false;
+                gameState.history = [];
+                gameState.unlockedMaps = [1];
+                
+                // 清除挂机定时器
+                if (autoInterval) {
+                    clearInterval(autoInterval);
+                    autoInterval = null;
+                }
+                
+                updateUI();
+                renderMaps();
+                updateHistory();
+                saveGame();
+                
+                adminMessage.textContent = '游戏已重置';
+                
+                addToHistory('管理员重置了游戏');
+            }
+        }
+
+        // 启动游戏
+        initGame();
+    </script>
+</body>
+</html>
