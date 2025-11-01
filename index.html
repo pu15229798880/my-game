@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>挂机升级游戏</title>
+    <title>挂机升级游戏 - 中国地图解锁</title>
     <style>
         * {
             margin: 0;
@@ -23,7 +23,7 @@
         }
         
         .container {
-            max-width: 600px;
+            max-width: 800px;
             width: 100%;
             background: rgba(0, 0, 0, 0.7);
             border-radius: 15px;
@@ -165,11 +165,80 @@
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.7);
         }
+        
+        /* 地图区域样式 */
+        .maps-section {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .maps-section h3 {
+            margin-bottom: 15px;
+            color: #ffcc00;
+        }
+        
+        .maps-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .map-card {
+            width: 150px;
+            height: 180px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .map-card.locked {
+            filter: grayscale(1);
+        }
+        
+        .map-card.unlocked {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.5);
+        }
+        
+        .map-image {
+            width: 100%;
+            height: 100px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .map-info {
+            padding: 10px;
+        }
+        
+        .map-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .map-level {
+            font-size: 0.8rem;
+            color: #ffcc00;
+        }
+        
+        .lock-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>挂机升级游戏</h1>
+        <h1>挂机升级游戏 - 中国地图解锁</h1>
         
         <div class="stats">
             <div class="stat-item">
@@ -195,156 +264,4 @@
             <button id="autoBtn">开启挂机模式</button>
         </div>
         
-        <div class="auto-status" id="autoStatus">
-            挂机模式运行中... 每秒获得5点经验
-        </div>
-        
-        <div class="history">
-            <h3>游戏记录</h3>
-            <div id="historyLog"></div>
-        </div>
-        
-        <footer>
-            游戏进度会自动保存到本地存储
-        </footer>
-    </div>
-
-    <script>
-        // 游戏状态
-        const gameState = {
-            level: 1,
-            exp: 0,
-            autoMode: false,
-            history: []
-        };
-
-        // DOM元素
-        const levelElement = document.getElementById('level');
-        const expElement = document.getElementById('exp');
-        const currentExpElement = document.getElementById('currentExp');
-        const requiredExpElement = document.getElementById('requiredExp');
-        const progressBar = document.getElementById('progressBar');
-        const clickBtn = document.getElementById('clickBtn');
-        const levelUpBtn = document.getElementById('levelUpBtn');
-        const autoBtn = document.getElementById('autoBtn');
-        const autoStatus = document.getElementById('autoStatus');
-        const historyLog = document.getElementById('historyLog');
-
-        // 从本地存储加载游戏状态
-        function loadGame() {
-            const savedGame = localStorage.getItem('idleGame');
-            if (savedGame) {
-                const parsedGame = JSON.parse(savedGame);
-                gameState.level = parsedGame.level || 1;
-                gameState.exp = parsedGame.exp || 0;
-                gameState.history = parsedGame.history || [];
-                
-                // 更新历史记录显示
-                updateHistory();
-            }
-            updateUI();
-        }
-
-        // 保存游戏状态到本地存储
-        function saveGame() {
-            localStorage.setItem('idleGame', JSON.stringify(gameState));
-        }
-
-        // 更新UI显示
-        function updateUI() {
-            levelElement.textContent = gameState.level;
-            expElement.textContent = gameState.exp;
-            currentExpElement.textContent = gameState.exp;
-            requiredExpElement.textContent = getRequiredExp();
-            
-            // 更新进度条
-            const progressPercent = (gameState.exp / getRequiredExp()) * 100;
-            progressBar.style.width = `${Math.min(progressPercent, 100)}%`;
-            
-            // 更新升级按钮状态
-            levelUpBtn.disabled = gameState.exp < getRequiredExp();
-            levelUpBtn.textContent = gameState.exp >= getRequiredExp() 
-                ? `升级 (消耗${getRequiredExp()}经验)` 
-                : `升级 (需要${getRequiredExp()}经验)`;
-                
-            // 更新挂机按钮状态
-            autoBtn.textContent = gameState.autoMode ? '关闭挂机模式' : '开启挂机模式';
-            autoStatus.classList.toggle('active', gameState.autoMode);
-        }
-
-        // 计算当前等级需要的经验值
-        function getRequiredExp() {
-            return 100; // 每级固定需要100经验
-        }
-
-        // 添加经验
-        function addExp(amount) {
-            gameState.exp += amount;
-            addToHistory(`获得了 ${amount} 点经验`);
-            updateUI();
-            saveGame();
-        }
-
-        // 升级
-        function levelUp() {
-            if (gameState.exp >= getRequiredExp()) {
-                gameState.exp -= getRequiredExp();
-                gameState.level++;
-                addToHistory(`升级到 ${gameState.level} 级！`);
-                updateUI();
-                saveGame();
-            }
-        }
-
-        // 切换挂机模式
-        function toggleAutoMode() {
-            gameState.autoMode = !gameState.autoMode;
-            
-            if (gameState.autoMode) {
-                addToHistory('开启了挂机模式');
-                autoInterval = setInterval(() => {
-                    addExp(5);
-                }, 1000);
-            } else {
-                addToHistory('关闭了挂机模式');
-                clearInterval(autoInterval);
-            }
-            
-            updateUI();
-        }
-
-        // 添加到历史记录
-        function addToHistory(message) {
-            const timestamp = new Date().toLocaleTimeString();
-            gameState.history.unshift(`${timestamp}: ${message}`);
-            
-            // 限制历史记录数量
-            if (gameState.history.length > 10) {
-                gameState.history.pop();
-            }
-            
-            updateHistory();
-        }
-
-        // 更新历史记录显示
-        function updateHistory() {
-            historyLog.innerHTML = '';
-            gameState.history.forEach(item => {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                historyItem.textContent = item;
-                historyLog.appendChild(historyItem);
-            });
-        }
-
-        // 事件监听
-        clickBtn.addEventListener('click', () => addExp(20));
-        levelUpBtn.addEventListener('click', levelUp);
-        autoBtn.addEventListener('click', toggleAutoMode);
-
-        // 初始化游戏
-        let autoInterval;
-        loadGame();
-    </script>
-</body>
-</html>
+  
