@@ -30,7 +30,6 @@
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             text-align: center;
-            position: relative;
         }
         
         h1 {
@@ -53,27 +52,10 @@
             padding: 10px 20px;
         }
         
-        .stat-label {
-            margin-bottom: 10px;
-        }
-        
         .stat-value {
             font-size: 2rem;
             font-weight: bold;
             color: #ffcc00;
-            cursor: pointer;
-            transition: all 0.2s;
-            padding: 5px 10px;
-            border-radius: 5px;
-            user-select: none;
-        }
-        
-        .stat-value:hover {
-            background: rgba(255, 204, 0, 0.1);
-        }
-        
-        .stat-value:active {
-            transform: scale(0.95);
         }
         
         .buttons {
@@ -152,11 +134,6 @@
             padding: 10px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            display: none;
-        }
-        
-        .auto-status.active {
-            display: block;
         }
         
         .history {
@@ -272,4 +249,25 @@
             padding: 30px;
             border-radius: 15px;
             width: 90%;
-    
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .admin-panel h2 {
+            color: #ffcc00;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .admin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .admin-input {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            font-
