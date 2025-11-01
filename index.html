@@ -9,216 +9,526 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
         }
         
         body {
             background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             color: white;
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
+            transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 95%;
             width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
             text-align: center;
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            animation: containerAppear 1s ease-out;
+            margin: 10px 0;
+        }
+
+        @keyframes containerAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
         
         h1 {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             color: #ffcc00;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            font-size: 2.5rem;
+            text-shadow: 0 2px 8px rgba(255, 204, 0, 0.5);
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #ffcc00, #ff9900);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            line-height: 1.2;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ffcc00, transparent);
+            border-radius: 2px;
         }
         
         .stats {
             display: flex;
             justify-content: space-around;
-            margin: 30px 0;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            box-shadow: 
+                inset 0 2px 8px rgba(0, 0, 0, 0.2),
+                0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transition: left 0.6s;
+        }
+
+        .stats:hover::before {
+            left: 100%;
         }
         
         .stat-item {
-            padding: 10px 20px;
+            padding: 10px 15px;
+            position: relative;
+        }
+        
+        .stat-label {
+            margin-bottom: 8px;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .stat-value {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
             color: #ffcc00;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px 15px;
+            border-radius: 12px;
+            user-select: none;
+            text-shadow: 0 0 12px rgba(255, 204, 0, 0.7);
+            background: rgba(255, 204, 0, 0.1);
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .stat-value::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        .stat-value:hover {
+            background: rgba(255, 204, 0, 0.15);
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(255, 204, 0, 0.3);
+        }
+        
+        .stat-value:hover::before {
+            left: 100%;
         }
         
         .buttons {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin: 30px 0;
+            margin: 25px 0;
         }
         
-        button {
-            padding: 15px 20px;
+        /* iOS风格透明玻璃按钮 */
+        .ios-glass-button {
+            position: relative;
+            padding: 16px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 18px;
             font-size: 1.1rem;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             color: white;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            box-shadow: 
+                0 10px 25px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
         
+        /* 按钮光效层 */
+        .ios-glass-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.6),
+                transparent
+            );
+            transition: left 0.7s;
+        }
+        
+        /* 按钮按下效果 - iOS风格 */
+        .ios-glass-button:active {
+            transform: scale(0.94) translateY(2px);
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+            transition: all 0.1s ease;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .ios-glass-button:active::before {
+            left: 100%;
+            transition: left 0.2s;
+        }
+        
+        /* 按钮悬停效果 */
+        .ios-glass-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 不同按钮的颜色 */
         #clickBtn {
-            background: linear-gradient(to right, #ff416c, #ff4b2b);
-            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
+            background: linear-gradient(135deg, rgba(255, 65, 108, 0.25), rgba(255, 75, 43, 0.25));
         }
         
         #levelUpBtn {
-            background: linear-gradient(to right, #11998e, #38ef7d);
-            box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
+            background: linear-gradient(135deg, rgba(17, 153, 142, 0.25), rgba(56, 239, 125, 0.25));
+        }
+        
+        #autoLevelUpBtn {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.25), rgba(255, 69, 0, 0.25));
         }
         
         #autoBtn {
-            background: linear-gradient(to right, #4A00E0, #8E2DE2);
-            box-shadow: 0 5px 15px rgba(74, 0, 224, 0.4);
+            background: linear-gradient(135deg, rgba(74, 0, 224, 0.25), rgba(142, 45, 226, 0.25));
         }
         
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        #rechargeBtn {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 165, 0, 0.25));
         }
         
-        button:active {
-            transform: translateY(1px);
+        #backpackBtn {
+            background: linear-gradient(135deg, rgba(75, 0, 130, 0.25), rgba(138, 43, 226, 0.25));
         }
         
-        button:disabled {
-            background: #666;
+        #withdrawBtn {
+            background: linear-gradient(135deg, rgba(0, 200, 83, 0.25), rgba(76, 175, 80, 0.25));
+        }
+        
+        /* 禁用状态 */
+        .ios-glass-button:disabled {
+            background: rgba(100, 100, 100, 0.3);
             cursor: not-allowed;
             transform: none;
-            box-shadow: none;
+            box-shadow: 
+                0 4px 12px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .ios-glass-button:disabled::before {
+            display: none;
+        }
+        
+        .ios-glass-button:disabled:active {
+            transform: none;
+            box-shadow: 
+                0 4px 12px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
         
         .progress-container {
-            margin: 30px 0;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            margin: 25px 0;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
             padding: 15px;
+            box-shadow: 
+                inset 0 2px 8px rgba(0, 0, 0, 0.2),
+                0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
         
         .progress-bar {
             height: 20px;
-            background: #333;
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
             overflow: hidden;
-            margin-top: 10px;
+            margin-top: 12px;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         .progress {
             height: 100%;
-            background: linear-gradient(to right, #ffcc00, #ff9900);
+            background: linear-gradient(90deg, #ffcc00, #ff9900, #ff6600);
             width: 0%;
-            transition: width 0.5s ease;
+            transition: width 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+            position: relative;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+        }
+
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: progressShine 2s infinite;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            font-size: 0.9rem;
         }
         
         .auto-status {
             margin-top: 20px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            font-size: 1rem;
+            box-shadow: 
+                inset 0 2px 8px rgba(0, 0, 0, 0.2),
+                0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .auto-status.active {
+            background: rgba(56, 239, 125, 0.15);
+            box-shadow: 
+                inset 0 2px 8px rgba(0, 0, 0, 0.2),
+                0 4px 12px rgba(56, 239, 125, 0.25);
+            border: 1px solid rgba(56, 239, 125, 0.3);
         }
         
         .history {
-            margin-top: 30px;
+            margin-top: 25px;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
             max-height: 150px;
             overflow-y: auto;
+            box-shadow: 
+                inset 0 2px 8px rgba(0, 0, 0, 0.2),
+                0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
         
         .history h3 {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: #ffcc00;
+            font-size: 1.3rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         .history-item {
-            padding: 5px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            padding-left: 8px;
         }
         
         footer {
             margin-top: 20px;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            line-height: 1.4;
         }
         
         /* 地图区域样式 */
         .maps-section {
-            margin-top: 30px;
+            margin-top: 25px;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            box-shadow: 
+                inset 0 2px 8px rgba(0, 0, 0, 0.2),
+                0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
         
         .maps-section h3 {
             margin-bottom: 15px;
             color: #ffcc00;
+            font-size: 1.3rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         .maps-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
         }
         
-        .map-card {
-            width: 150px;
-            height: 180px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
+        /* iOS风格透明玻璃地图卡片 */
+        .ios-map-card {
+            width: 140px;
+            height: 170px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
+            cursor: pointer;
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.25);
         }
         
-        .map-card.locked {
-            filter: grayscale(1);
+        .ios-map-card.locked {
+            filter: grayscale(1) brightness(0.7);
+            cursor: not-allowed;
         }
         
-        .map-card.unlocked {
+        .ios-map-card.unlocked {
             transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.5);
+            box-shadow: 
+                0 12px 25px rgba(255, 204, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+        }
+        
+        .ios-map-card.active {
+            box-shadow: 
+                0 0 0 2px #ffcc00,
+                0 12px 25px rgba(255, 204, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            transform: scale(1.08);
+        }
+        
+        .ios-map-card:hover:not(.locked) {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+        
+        .ios-map-card:active:not(.locked) {
+            transform: scale(0.98);
+            transition: transform 0.1s;
         }
         
         .map-image {
             width: 100%;
-            height: 100px;
+            height: 90px;
             background-size: cover;
             background-position: center;
+            transition: all 0.5s ease;
+        }
+
+        .ios-map-card:hover .map-image {
+            transform: scale(1.1);
         }
         
         .map-info {
-            padding: 10px;
+            padding: 12px;
         }
         
         .map-name {
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            font-size: 1rem;
         }
         
         .map-level {
             font-size: 0.8rem;
             color: #ffcc00;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .lock-icon {
@@ -226,86 +536,75 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: rgba(255, 255, 255, 0.7);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
         }
         
-        /* 管理员系统样式 */
-        .admin-overlay {
+        /* iOS风格管理员系统 */
+        .admin-overlay, .recharge-overlay, .backpack-overlay, .withdraw-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.7);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 15px;
+            overflow-y: auto;
         }
         
-        .admin-panel {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        .admin-panel, .recharge-panel, .backpack-panel, .withdraw-panel {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 450px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(50px) saturate(180%);
+            -webkit-backdrop-filter: blur(50px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
-        .admin-panel h2 {
+        .admin-panel h2, .recharge-panel h2, .backpack-panel h2, .withdraw-panel h2 {
             color: #ffcc00;
             margin-bottom: 20px;
             text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            font-size: 1.8rem;
+            font-weight: 700;
         }
         
-        .admin-form {
+        .admin-form, .recharge-form, .withdraw-form {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
         
-        .admin-input {
+        .admin-input, .recharge-input, .withdraw-input {
             padding: 12px 15px;
             border: none;
-            border-radius: 8px;
+            border-radius: 14px;
             background: rgba(255, 255, 255, 0.9);
             font-size: 1rem;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
         
-        .admin-buttons {
+        .admin-buttons, .recharge-buttons, .withdraw-buttons {
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .admin-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .admin-submit {
-            background: linear-gradient(to right, #11998e, #38ef7d);
-            color: white;
-        }
-        
-        .admin-cancel {
-            background: linear-gradient(to right, #ff416c, #ff4b2b);
-            color: white;
-        }
-        
-        .admin-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .admin-btn:active {
-            transform: translateY(1px);
+            gap: 12px;
+            margin-top: 12px;
         }
         
         .admin-controls {
@@ -316,37 +615,180 @@
         .admin-controls h3 {
             color: #ffcc00;
             margin-bottom: 15px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            font-size: 1.3rem;
         }
         
         .admin-control-row {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 15px;
             align-items: center;
         }
         
         .admin-control-label {
-            flex: 1;
+            flex: 1 1 100%;
             text-align: left;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
         }
         
         .admin-control-input {
-            flex: 2;
-            padding: 8px 10px;
+            flex: 1;
+            min-width: 120px;
+            padding: 10px 12px;
             border: none;
-            border-radius: 5px;
+            border-radius: 12px;
             background: rgba(255, 255, 255, 0.9);
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-size: 0.9rem;
         }
         
-        .admin-control-btn {
-            flex: 1;
-            padding: 8px 10px;
-            border: none;
-            border-radius: 5px;
-            background: linear-gradient(to right, #4A00E0, #8E2DE2);
-            color: white;
-            cursor: pointer;
+        .admin-message, .recharge-message, .withdraw-message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            display: none;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+        }
+        
+        .admin-success, .recharge-success, .withdraw-success {
+            background: rgba(56, 239, 125, 0.25);
+            color: #38ef7d;
+            border: 1px solid rgba(56, 239, 125, 0.4);
+        }
+        
+        .admin-error, .recharge-error, .withdraw-error {
+            background: rgba(255, 65, 108, 0.25);
+            color: #ff416c;
+            border: 1px solid rgba(255, 65, 108, 0.4);
+        }
+
+        /* 背包系统样式 */
+        .backpack-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .backpack-item {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .backpack-item:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .item-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        
+        .item-name {
             font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .item-count {
+            color: #ffcc00;
+            font-size: 0.9rem;
+        }
+
+        /* 提现信息样式 */
+        .withdraw-info {
+            background: rgba(255, 204, 0, 0.15);
+            color: #ffcc00;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                border-radius: 16px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .stat-value {
+                font-size: 1.8rem;
+            }
+            
+            .ios-map-card {
+                width: 120px;
+                height: 150px;
+            }
+            
+            .map-image {
+                height: 80px;
+            }
+            
+            .admin-panel, .recharge-panel, .backpack-panel, .withdraw-panel {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 12px;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .ios-map-card {
+                width: 100px;
+                height: 130px;
+            }
+            
+            .map-image {
+                height: 70px;
+            }
+            
+            .map-name {
+                font-size: 0.9rem;
+            }
+            
+            .admin-control-row {
+                flex-direction: column;
+            }
+            
+            .admin-control-input {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -369,13 +811,18 @@
             <div>升级进度: <span id="currentExp">0</span> / <span id="requiredExp">100</span></div>
             <div class="progress-bar">
                 <div class="progress" id="progressBar"></div>
+                <div class="progress-text" id="progressText">0%</div>
             </div>
         </div>
         
         <div class="buttons">
-            <button id="clickBtn">点击获得经验 (+20)</button>
-            <button id="levelUpBtn" disabled>升级 (需要100经验)</button>
-            <button id="autoBtn">开启挂机模式</button>
+            <button class="ios-glass-button" id="clickBtn">点击获得经验 (+20)</button>
+            <button class="ios-glass-button" id="levelUpBtn" disabled>升级 (需要100经验)</button>
+            <button class="ios-glass-button" id="autoLevelUpBtn" disabled>一键升级</button>
+            <button class="ios-glass-button" id="autoBtn">开启挂机模式</button>
+            <button class="ios-glass-button" id="rechargeBtn">充值系统 (648)</button>
+            <button class="ios-glass-button" id="backpackBtn">背包系统</button>
+            <button class="ios-glass-button" id="withdrawBtn">提现到微信</button>
         </div>
         
         <div class="auto-status" id="autoStatus">
@@ -406,29 +853,83 @@
             <div class="admin-form" id="passwordForm">
                 <input type="password" class="admin-input" id="adminPassword" placeholder="请输入管理员密码">
                 <div class="admin-buttons">
-                    <button class="admin-btn admin-submit" id="adminSubmit">确认</button>
-                    <button class="admin-btn admin-cancel" id="adminCancel">取消</button>
+                    <button class="ios-glass-button admin-submit" id="adminSubmit">确认</button>
+                    <button class="ios-glass-button admin-cancel" id="adminCancel">取消</button>
                 </div>
-                <div id="adminMessage" style="margin-top: 15px; color: #ffcc00;"></div>
+                <div class="admin-message" id="adminMessage"></div>
             </div>
             
             <div class="admin-controls" id="adminControls">
                 <h3>开发者调试</h3>
                 <div class="admin-control-row">
                     <div class="admin-control-label">当前等级:</div>
-                    <input type="number" class="admin-control-input" id="adminLevel" min="1" max="100">
-                    <button class="admin-control-btn" id="setLevelBtn">设置等级</button>
+                    <input type="number" class="admin-control-input" id="adminLevel" min="1">
+                    <button class="ios-glass-button admin-control-btn" id="setLevelBtn">设置等级</button>
                 </div>
                 <div class="admin-control-row">
                     <div class="admin-control-label">当前经验:</div>
-                    <input type="number" class="admin-control-input" id="adminExp" min="0" max="10000">
-                    <button class="admin-control-btn" id="setExpBtn">设置经验</button>
+                    <input type="number" class="admin-control-input" id="adminExp" min="0">
+                    <button class="ios-glass-button admin-control-btn" id="setExpBtn">设置经验</button>
+                </div>
+                <div class="admin-control-row">
+                    <div class="admin-control-label">挂机经验/秒:</div>
+                    <input type="number" class="admin-control-input" id="autoExpRate" min="1">
+                    <button class="ios-glass-button admin-control-btn" id="setAutoExpBtn">设置经验率</button>
                 </div>
                 <div class="admin-control-row">
                     <div class="admin-control-label">操作:</div>
-                    <button class="admin-control-btn" id="resetGameBtn">重置游戏</button>
-                    <button class="admin-control-btn" id="closeAdminBtn">关闭面板</button>
+                    <button class="ios-glass-button admin-control-btn" id="resetGameBtn">重置游戏</button>
+                    <button class="ios-glass-button admin-control-btn" id="closeAdminBtn">关闭面板</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 充值系统 -->
+    <div class="recharge-overlay" id="rechargeOverlay">
+        <div class="recharge-panel">
+            <h2>充值系统</h2>
+            <div class="recharge-form">
+                <p style="margin-bottom: 15px; text-align: center;">充值金额: <span style="color: #ffcc00; font-weight: bold;">648</span></p>
+                <p style="margin-bottom: 15px; text-align: center; font-size: 0.9rem;">充值成功可获得10万经验</p>
+                <input type="password" class="recharge-input" id="rechargePassword" placeholder="请输入充值卡密">
+                <div class="recharge-buttons">
+                    <button class="ios-glass-button recharge-submit" id="rechargeSubmit">确认充值</button>
+                    <button class="ios-glass-button recharge-cancel" id="rechargeCancel">取消</button>
+                </div>
+                <div class="recharge-message" id="rechargeMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 背包系统 -->
+    <div class="backpack-overlay" id="backpackOverlay">
+        <div class="backpack-panel">
+            <h2>背包系统</h2>
+            <div class="backpack-items" id="backpackItems">
+                <!-- 背包物品将通过JavaScript动态生成 -->
+            </div>
+            <div style="margin-top: 20px;">
+                <button class="ios-glass-button" id="closeBackpackBtn" style="width: 100%;">关闭背包</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提现系统 -->
+    <div class="withdraw-overlay" id="withdrawOverlay">
+        <div class="withdraw-panel">
+            <h2>提现到微信</h2>
+            <div class="withdraw-info">
+                经验值可以按1:1比例兑换成微信余额
+            </div>
+            <div class="withdraw-form">
+                <input type="number" class="withdraw-input" id="withdrawAmount" placeholder="请输入兑换金额" min="1">
+                <input type="text" class="withdraw-input" id="wechatId" placeholder="请输入您的微信号">
+                <div class="withdraw-buttons">
+                    <button class="ios-glass-button withdraw-submit" id="withdrawSubmit">确认提现</button>
+                    <button class="ios-glass-button withdraw-cancel" id="withdrawCancel">取消</button>
+                </div>
+                <div class="withdraw-message" id="withdrawMessage"></div>
             </div>
         </div>
     </div>
@@ -440,19 +941,84 @@
             exp: 0,
             autoMode: false,
             history: [],
-            unlockedMaps: [1] // 初始解锁第一个地图
+            unlockedMaps: [1], // 初始解锁第一个地图
+            activeMap: 1, // 当前激活的地图
+            autoExpRate: 5, // 挂机模式每秒获得的经验数量
+            backpack: {
+                "经验药水": { count: 0, description: "使用后获得1000经验" },
+                "双倍经验卡": { count: 0, description: "1小时内获得双倍经验" },
+                "自动挂机卡": { count: 0, description: "自动挂机1小时" },
+                "地图解锁券": { count: 0, description: "立即解锁一个随机地图" }
+            },
+            withdrawHistory: [] // 新增：提现记录
         };
 
-        // 地图数据
+        // 地图数据 - 添加背景图片URL
         const mapsData = [
-            { id: 1, name: "长城", levelRequired: 1, image: "linear-gradient(135deg, #8B4513, #D2691E)", description: "万里长城，中华文明的象征" },
-            { id: 2, name: "兵马俑", levelRequired: 5, image: "linear-gradient(135deg, #654321, #8B4513)", description: "秦始皇陵兵马俑，世界第八大奇迹" },
-            { id: 3, name: "故宫", levelRequired: 10, image: "linear-gradient(135deg, #B22222, #DC143C)", description: "紫禁城，明清两代皇家宫殿" },
-            { id: 4, name: "长江三峡", levelRequired: 15, image: "linear-gradient(135deg, #1E90FF, #4169E1)", description: "长江三峡，壮丽的自然景观" },
-            { id: 5, name: "黄山", levelRequired: 20, image: "linear-gradient(135deg, #228B22, #32CD32)", description: "黄山，天下第一奇山" },
-            { id: 6, name: "敦煌莫高窟", levelRequired: 25, image: "linear-gradient(135deg, #DAA520, #F4A460)", description: "莫高窟，佛教艺术宝库" },
-            { id: 7, name: "桂林山水", levelRequired: 30, image: "linear-gradient(135deg, #2E8B57, #3CB371)", description: "桂林山水甲天下" },
-            { id: 8, name: "布达拉宫", levelRequired: 35, image: "linear-gradient(135deg, #800000, #B22222)", description: "布达拉宫，世界屋脊的明珠" }
+            { 
+                id: 1, 
+                name: "长城", 
+                levelRequired: 1, 
+                image: "linear-gradient(135deg, #8B4513, #D2691E)", 
+                description: "万里长城，中华文明的象征",
+                background: "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            },
+            { 
+                id: 2, 
+                name: "兵马俑", 
+                levelRequired: 5, 
+                image: "linear-gradient(135deg, #654321, #8B4513)", 
+                description: "秦始皇陵兵马俑，世界第八大奇迹",
+                background: "https://images.unsplash.com/photo-1547981609-4b6bf67b21d2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            },
+            { 
+                id: 3, 
+                name: "故宫", 
+                levelRequired: 10, 
+                image: "linear-gradient(135deg, #B22222, #DC143C)", 
+                description: "紫禁城，明清两代皇家宫殿",
+                background: "https://images.unsplash.com/photo-1599623560574-39d485900c95?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            },
+            { 
+                id: 4, 
+                name: "长江三峡", 
+                levelRequired: 15, 
+                image: "linear-gradient(135deg, #1E90FF, #4169E1)", 
+                description: "长江三峡，壮丽的自然景观",
+                background: "https://images.unsplash.com/photo-1542662565-7e0b2a5b0b7d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            },
+            { 
+                id: 5, 
+                name: "黄山", 
+                levelRequired: 20, 
+                image: "linear-gradient(135deg, #228B22, #32CD32)", 
+                description: "黄山，天下第一奇山",
+                background: "https://images.unsplash.com/photo-1518638150340-f706e86654de?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            },
+            { 
+                id: 6, 
+                name: "敦煌莫高窟", 
+                levelRequired: 25, 
+                image: "linear-gradient(135deg, #DAA520, #F4A460)", 
+                description: "莫高窟，佛教艺术宝库",
+                background: "https://images.unsplash.com/photo-1588347818125-8b8e4c6c9c0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            },
+            { 
+                id: 7, 
+                name: "桂林山水", 
+                levelRequired: 30, 
+                image: "linear-gradient(135deg, #2E8B57, #3CB371)", 
+                description: "桂林山水甲天下",
+                background: "https://images.unsplash.com/photo-1542662565-7e0b2a5b0b7d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            },
+            { 
+                id: 8, 
+                name: "布达拉宫", 
+                levelRequired: 35, 
+                image: "linear-gradient(135deg, #800000, #B22222)", 
+                description: "布达拉宫，世界屋脊的明珠",
+                background: "https://images.unsplash.com/photo-1599623560574-39d485900c95?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            }
         ];
 
         // DOM元素
@@ -461,12 +1027,18 @@
         const currentExpElement = document.getElementById('currentExp');
         const requiredExpElement = document.getElementById('requiredExp');
         const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
         const clickBtn = document.getElementById('clickBtn');
         const levelUpBtn = document.getElementById('levelUpBtn');
+        const autoLevelUpBtn = document.getElementById('autoLevelUpBtn');
         const autoBtn = document.getElementById('autoBtn');
+        const rechargeBtn = document.getElementById('rechargeBtn');
+        const backpackBtn = document.getElementById('backpackBtn');
+        const withdrawBtn = document.getElementById('withdrawBtn'); // 新增
         const autoStatus = document.getElementById('autoStatus');
         const historyLog = document.getElementById('historyLog');
         const mapsContainer = document.getElementById('mapsContainer');
+        const backpackItems = document.getElementById('backpackItems');
 
         // 管理员系统DOM元素
         const adminOverlay = document.getElementById('adminOverlay');
@@ -478,15 +1050,37 @@
         const adminControls = document.getElementById('adminControls');
         const adminLevel = document.getElementById('adminLevel');
         const adminExp = document.getElementById('adminExp');
+        const autoExpRate = document.getElementById('autoExpRate');
         const setLevelBtn = document.getElementById('setLevelBtn');
         const setExpBtn = document.getElementById('setExpBtn');
+        const setAutoExpBtn = document.getElementById('setAutoExpBtn');
         const resetGameBtn = document.getElementById('resetGameBtn');
         const closeAdminBtn = document.getElementById('closeAdminBtn');
+
+        // 充值系统DOM元素
+        const rechargeOverlay = document.getElementById('rechargeOverlay');
+        const rechargePassword = document.getElementById('rechargePassword');
+        const rechargeSubmit = document.getElementById('rechargeSubmit');
+        const rechargeCancel = document.getElementById('rechargeCancel');
+        const rechargeMessage = document.getElementById('rechargeMessage');
+
+        // 背包系统DOM元素
+        const backpackOverlay = document.getElementById('backpackOverlay');
+        const closeBackpackBtn = document.getElementById('closeBackpackBtn');
+
+        // 提现系统DOM元素
+        const withdrawOverlay = document.getElementById('withdrawOverlay');
+        const withdrawAmount = document.getElementById('withdrawAmount');
+        const wechatId = document.getElementById('wechatId');
+        const withdrawSubmit = document.getElementById('withdrawSubmit');
+        const withdrawCancel = document.getElementById('withdrawCancel');
+        const withdrawMessage = document.getElementById('withdrawMessage');
 
         // 管理员系统变量
         let levelClickCount = 0;
         let levelClickTimeout;
         const ADMIN_PASSWORD = "831024";
+        const RECHARGE_PASSWORD = "831024";
         let autoInterval = null;
 
         // 初始化游戏
@@ -497,7 +1091,11 @@
             // 绑定事件
             clickBtn.addEventListener('click', () => addExp(20));
             levelUpBtn.addEventListener('click', levelUp);
+            autoLevelUpBtn.addEventListener('click', autoLevelUp);
             autoBtn.addEventListener('click', toggleAutoMode);
+            rechargeBtn.addEventListener('click', showRechargePanel);
+            backpackBtn.addEventListener('click', showBackpackPanel);
+            withdrawBtn.addEventListener('click', showWithdrawPanel); // 新增
             
             // 等级点击事件 - 管理员系统入口
             levelElement.addEventListener('click', handleLevelClick);
@@ -507,8 +1105,20 @@
             adminCancel.addEventListener('click', hideAdminPanel);
             setLevelBtn.addEventListener('click', setLevel);
             setExpBtn.addEventListener('click', setExp);
+            setAutoExpBtn.addEventListener('click', setAutoExpRate);
             resetGameBtn.addEventListener('click', resetGame);
             closeAdminBtn.addEventListener('click', hideAdminPanel);
+            
+            // 充值系统事件监听
+            rechargeSubmit.addEventListener('click', checkRechargePassword);
+            rechargeCancel.addEventListener('click', hideRechargePanel);
+            
+            // 背包系统事件监听
+            closeBackpackBtn.addEventListener('click', hideBackpackPanel);
+            
+            // 提现系统事件监听
+            withdrawSubmit.addEventListener('click', processWithdraw);
+            withdrawCancel.addEventListener('click', hideWithdrawPanel);
             
             // 按Enter键提交密码
             adminPassword.addEventListener('keypress', (e) => {
@@ -517,9 +1127,24 @@
                 }
             });
             
+            rechargePassword.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    checkRechargePassword();
+                }
+            });
+            
+            withdrawAmount.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    processWithdraw();
+                }
+            });
+            
             // 更新UI
             updateUI();
             renderMaps();
+            
+            // 设置初始背景
+            updateBackground();
         }
 
         // 从本地存储加载游戏状态
@@ -531,6 +1156,15 @@
                 gameState.exp = parsedGame.exp || 0;
                 gameState.history = parsedGame.history || [];
                 gameState.unlockedMaps = parsedGame.unlockedMaps || [1];
+                gameState.activeMap = parsedGame.activeMap || 1;
+                gameState.autoExpRate = parsedGame.autoExpRate || 5;
+                gameState.backpack = parsedGame.backpack || {
+                    "经验药水": { count: 0, description: "使用后获得1000经验" },
+                    "双倍经验卡": { count: 0, description: "1小时内获得双倍经验" },
+                    "自动挂机卡": { count: 0, description: "自动挂机1小时" },
+                    "地图解锁券": { count: 0, description: "立即解锁一个随机地图" }
+                };
+                gameState.withdrawHistory = parsedGame.withdrawHistory || []; // 新增
                 
                 // 更新历史记录显示
                 updateHistory();
@@ -552,6 +1186,7 @@
             // 更新进度条
             const progressPercent = (gameState.exp / getRequiredExp()) * 100;
             progressBar.style.width = `${Math.min(progressPercent, 100)}%`;
+            progressText.textContent = `${Math.min(Math.round(progressPercent), 100)}%`;
             
             // 更新升级按钮状态
             levelUpBtn.disabled = gameState.exp < getRequiredExp();
@@ -559,11 +1194,21 @@
                 ? `升级 (消耗${getRequiredExp()}经验)` 
                 : `升级 (需要${getRequiredExp()}经验)`;
                 
+            // 更新一键升级按钮状态
+            autoLevelUpBtn.disabled = gameState.exp < 100;
+            autoLevelUpBtn.textContent = `一键升级 (可升${Math.floor(gameState.exp / 100)}级)`;
+                
             // 更新挂机按钮状态
             autoBtn.textContent = gameState.autoMode ? '关闭挂机模式' : '开启挂机模式';
             autoStatus.textContent = gameState.autoMode 
-                ? '挂机模式运行中... 每秒获得5点经验' 
+                ? `挂机模式运行中... 每秒获得${gameState.autoExpRate}点经验` 
                 : '挂机模式未开启';
+                
+            if (gameState.autoMode) {
+                autoStatus.classList.add('active');
+            } else {
+                autoStatus.classList.remove('active');
+            }
         }
 
         // 计算当前等级需要的经验值
@@ -596,6 +1241,25 @@
             }
         }
 
+        // 一键升级功能
+        function autoLevelUp() {
+            if (gameState.exp < 100) return;
+            
+            const oldLevel = gameState.level;
+            const levelsToUpgrade = Math.floor(gameState.exp / 100);
+            gameState.level += levelsToUpgrade;
+            gameState.exp = gameState.exp % 100;
+            
+            addToHistory(`一键升级！从 ${oldLevel} 级升到 ${gameState.level} 级`);
+            
+            // 检查是否有新地图解锁
+            checkMapUnlocks(oldLevel);
+            
+            updateUI();
+            renderMaps();
+            saveGame();
+        }
+
         // 检查地图解锁
         function checkMapUnlocks(oldLevel) {
             mapsData.forEach(map => {
@@ -616,8 +1280,9 @@
             
             mapsData.forEach(map => {
                 const isUnlocked = gameState.unlockedMaps.includes(map.id);
+                const isActive = gameState.activeMap === map.id;
                 const mapCard = document.createElement('div');
-                mapCard.className = `map-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+                mapCard.className = `ios-map-card ${isUnlocked ? 'unlocked' : 'locked'} ${isActive ? 'active' : ''}`;
                 
                 mapCard.innerHTML = `
                     <div class="map-image" style="background: ${map.image}"></div>
@@ -628,8 +1293,30 @@
                     ${!isUnlocked ? '<div class="lock-icon">🔒</div>' : ''}
                 `;
                 
+                // 为已解锁的地图添加点击事件
+                if (isUnlocked) {
+                    mapCard.addEventListener('click', () => selectMap(map.id));
+                }
+                
                 mapsContainer.appendChild(mapCard);
             });
+        }
+
+        // 选择地图
+        function selectMap(mapId) {
+            gameState.activeMap = mapId;
+            updateBackground();
+            renderMaps();
+            saveGame();
+            addToHistory(`切换到了 ${mapsData.find(map => map.id === mapId).name} 背景`);
+        }
+
+        // 更新背景
+        function updateBackground() {
+            const activeMap = mapsData.find(map => map.id === gameState.activeMap);
+            if (activeMap) {
+                document.body.style.backgroundImage = `url('${activeMap.background}')`;
+            }
         }
 
         // 切换挂机模式
@@ -637,9 +1324,9 @@
             gameState.autoMode = !gameState.autoMode;
             
             if (gameState.autoMode) {
-                addToHistory('开启了挂机模式');
+                addToHistory(`开启了挂机模式 (${gameState.autoExpRate}经验/秒)`);
                 autoInterval = setInterval(() => {
-                    addExp(5);
+                    addExp(gameState.autoExpRate);
                 }, 1000);
             } else {
                 addToHistory('关闭了挂机模式');
@@ -706,6 +1393,8 @@
             adminOverlay.style.display = 'none';
             adminPassword.value = '';
             adminMessage.textContent = '';
+            adminMessage.className = 'admin-message';
+            adminMessage.style.display = 'none';
             passwordForm.style.display = 'flex';
             adminControls.style.display = 'none';
             levelClickCount = 0;
@@ -722,11 +1411,14 @@
                 // 填充当前数据
                 adminLevel.value = gameState.level;
                 adminExp.value = gameState.exp;
+                autoExpRate.value = gameState.autoExpRate;
                 
                 addToHistory('进入了管理员模式');
             } else {
                 // 密码错误
                 adminMessage.textContent = '密码错误，请重试！';
+                adminMessage.className = 'admin-message admin-error';
+                adminMessage.style.display = 'block';
                 adminPassword.value = '';
                 adminPassword.focus();
             }
@@ -734,7 +1426,7 @@
 
         function setLevel() {
             const newLevel = parseInt(adminLevel.value);
-            if (newLevel >= 1 && newLevel <= 100) {
+            if (newLevel >= 1) {
                 const oldLevel = gameState.level;
                 gameState.level = newLevel;
                 
@@ -746,25 +1438,52 @@
                 saveGame();
                 
                 adminMessage.textContent = `等级已设置为 ${newLevel}`;
+                adminMessage.className = 'admin-message admin-success';
+                adminMessage.style.display = 'block';
                 
                 addToHistory(`管理员将等级设置为 ${newLevel}`);
             } else {
-                adminMessage.textContent = '请输入有效的等级 (1-100)';
+                adminMessage.textContent = '请输入有效的等级';
+                adminMessage.className = 'admin-message admin-error';
+                adminMessage.style.display = 'block';
             }
         }
 
         function setExp() {
             const newExp = parseInt(adminExp.value);
-            if (newExp >= 0 && newExp <= 10000) {
+            if (newExp >= 0) {
                 gameState.exp = newExp;
                 updateUI();
                 saveGame();
                 
                 adminMessage.textContent = `经验值已设置为 ${newExp}`;
+                adminMessage.className = 'admin-message admin-success';
+                adminMessage.style.display = 'block';
                 
                 addToHistory(`管理员将经验值设置为 ${newExp}`);
             } else {
-                adminMessage.textContent = '请输入有效的经验值 (0-10000)';
+                adminMessage.textContent = '请输入有效的经验值';
+                adminMessage.className = 'admin-message admin-error';
+                adminMessage.style.display = 'block';
+            }
+        }
+
+        function setAutoExpRate() {
+            const newRate = parseInt(autoExpRate.value);
+            if (newRate >= 1) {
+                gameState.autoExpRate = newRate;
+                updateUI();
+                saveGame();
+                
+                adminMessage.textContent = `挂机经验率已设置为 ${newRate}/秒`;
+                adminMessage.className = 'admin-message admin-success';
+                adminMessage.style.display = 'block';
+                
+                addToHistory(`管理员将挂机经验率设置为 ${newRate}/秒`);
+            } else {
+                adminMessage.textContent = '请输入有效的经验率';
+                adminMessage.className = 'admin-message admin-error';
+                adminMessage.style.display = 'block';
             }
         }
 
@@ -775,6 +1494,15 @@
                 gameState.autoMode = false;
                 gameState.history = [];
                 gameState.unlockedMaps = [1];
+                gameState.activeMap = 1;
+                gameState.autoExpRate = 5;
+                gameState.backpack = {
+                    "经验药水": { count: 0, description: "使用后获得1000经验" },
+                    "双倍经验卡": { count: 0, description: "1小时内获得双倍经验" },
+                    "自动挂机卡": { count: 0, description: "自动挂机1小时" },
+                    "地图解锁券": { count: 0, description: "立即解锁一个随机地图" }
+                };
+                gameState.withdrawHistory = []; // 重置提现记录
                 
                 // 清除挂机定时器
                 if (autoInterval) {
@@ -785,12 +1513,173 @@
                 updateUI();
                 renderMaps();
                 updateHistory();
+                updateBackground();
                 saveGame();
                 
                 adminMessage.textContent = '游戏已重置';
+                adminMessage.className = 'admin-message admin-success';
+                adminMessage.style.display = 'block';
                 
                 addToHistory('管理员重置了游戏');
             }
+        }
+
+        // 充值系统功能
+        function showRechargePanel() {
+            rechargeOverlay.style.display = 'flex';
+            rechargePassword.focus();
+        }
+
+        function hideRechargePanel() {
+            rechargeOverlay.style.display = 'none';
+            rechargePassword.value = '';
+            rechargeMessage.textContent = '';
+            rechargeMessage.className = 'recharge-message';
+            rechargeMessage.style.display = 'none';
+        }
+
+        function checkRechargePassword() {
+            const password = rechargePassword.value.trim();
+            
+            if (password === RECHARGE_PASSWORD) {
+                // 密码正确，充值成功
+                addExp(100000);
+                gameState.backpack["经验药水"].count += 5;
+                gameState.backpack["双倍经验卡"].count += 2;
+                gameState.backpack["自动挂机卡"].count += 3;
+                gameState.backpack["地图解锁券"].count += 1;
+                
+                updateUI();
+                saveGame();
+                
+                rechargeMessage.textContent = '充值成功！获得10万经验和道具礼包！';
+                rechargeMessage.className = 'recharge-message recharge-success';
+                rechargeMessage.style.display = 'block';
+                
+                addToHistory('充值成功，获得10万经验和道具礼包');
+                
+                // 3秒后自动关闭
+                setTimeout(() => {
+                    hideRechargePanel();
+                }, 3000);
+            } else {
+                // 密码错误
+                rechargeMessage.textContent = '卡密错误，请重试！';
+                rechargeMessage.className = 'recharge-message recharge-error';
+                rechargeMessage.style.display = 'block';
+                rechargePassword.value = '';
+                rechargePassword.focus();
+            }
+        }
+
+        // 背包系统功能
+        function showBackpackPanel() {
+            renderBackpackItems();
+            backpackOverlay.style.display = 'flex';
+        }
+
+        function hideBackpackPanel() {
+            backpackOverlay.style.display = 'none';
+        }
+
+        function renderBackpackItems() {
+            backpackItems.innerHTML = '';
+            
+            for (const [itemName, itemData] of Object.entries(gameState.backpack)) {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'backpack-item';
+                
+                // 根据物品名称设置图标
+                let icon = "📦";
+                if (itemName === "经验药水") icon = "🧪";
+                else if (itemName === "双倍经验卡") icon = "✨";
+                else if (itemName === "自动挂机卡") icon = "⏱️";
+                else if (itemName === "地图解锁券") icon = "🎫";
+                
+                itemElement.innerHTML = `
+                    <div class="item-icon">${icon}</div>
+                    <div class="item-name">${itemName}</div>
+                    <div class="item-count">数量: ${itemData.count}</div>
+                `;
+                
+                backpackItems.appendChild(itemElement);
+            }
+        }
+
+        // 提现系统功能
+        function showWithdrawPanel() {
+            withdrawOverlay.style.display = 'flex';
+            withdrawAmount.focus();
+        }
+
+        function hideWithdrawPanel() {
+            withdrawOverlay.style.display = 'none';
+            withdrawAmount.value = '';
+            wechatId.value = '';
+            withdrawMessage.textContent = '';
+            withdrawMessage.className = 'withdraw-message';
+            withdrawMessage.style.display = 'none';
+        }
+
+        function processWithdraw() {
+            const amount = parseInt(withdrawAmount.value);
+            const id = wechatId.value.trim();
+            
+            // 验证输入
+            if (!amount || amount < 1) {
+                withdrawMessage.textContent = '请输入有效的兑换金额';
+                withdrawMessage.className = 'withdraw-message withdraw-error';
+                withdrawMessage.style.display = 'block';
+                return;
+            }
+            
+            if (!id) {
+                withdrawMessage.textContent = '请输入微信号';
+                withdrawMessage.className = 'withdraw-message withdraw-error';
+                withdrawMessage.style.display = 'block';
+                return;
+            }
+            
+            // 检查经验值是否足够
+            if (gameState.exp < amount) {
+                withdrawMessage.textContent = `经验值不足！当前经验值: ${gameState.exp}`;
+                withdrawMessage.className = 'withdraw-message withdraw-error';
+                withdrawMessage.style.display = 'block';
+                return;
+            }
+            
+            // 执行兑换
+            gameState.exp -= amount;
+            
+            // 记录提现历史
+            const timestamp = new Date().toLocaleString();
+            gameState.withdrawHistory.unshift({
+                amount: amount,
+                wechatId: id,
+                timestamp: timestamp
+            });
+            
+            // 限制提现记录数量
+            if (gameState.withdrawHistory.length > 20) {
+                gameState.withdrawHistory.pop();
+            }
+            
+            // 更新UI和保存游戏
+            updateUI();
+            saveGame();
+            
+            // 显示成功消息
+            withdrawMessage.textContent = `提现成功！${amount}经验已兑换为${amount}元微信余额，将转入微信号: ${id}`;
+            withdrawMessage.className = 'withdraw-message withdraw-success';
+            withdrawMessage.style.display = 'block';
+            
+            // 添加到历史记录
+            addToHistory(`提现成功！${amount}经验兑换为${amount}元微信余额`);
+            
+            // 3秒后自动关闭
+            setTimeout(() => {
+                hideWithdrawPanel();
+            }, 3000);
         }
 
         // 启动游戏
