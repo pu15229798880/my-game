@@ -30,6 +30,7 @@
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             text-align: center;
+            position: relative;
         }
         
         h1 {
@@ -52,10 +53,26 @@
             padding: 10px 20px;
         }
         
+        .stat-label {
+            margin-bottom: 10px;
+        }
+        
         .stat-value {
             font-size: 2rem;
             font-weight: bold;
             color: #ffcc00;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .stat-value:hover {
+            background: rgba(255, 204, 0, 0.1);
+        }
+        
+        .stat-value:active {
+            transform: scale(0.95);
         }
         
         .buttons {
@@ -234,34 +251,25 @@
             font-size: 2rem;
             color: rgba(255, 255, 255, 0.7);
         }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>挂机升级游戏 - 中国地图解锁</h1>
         
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-label">等级</div>
-                <div class="stat-value" id="level">1</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">经验值</div>
-                <div class="stat-value" id="exp">0</div>
-            </div>
-        </div>
+        /* 管理员系统样式 */
+        .admin-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
         
-        <div class="progress-container">
-            <div>升级进度: <span id="currentExp">0</span> / <span id="requiredExp">100</span></div>
-            <div class="progress-bar">
-                <div class="progress" id="progressBar"></div>
-            </div>
-        </div>
-        
-        <div class="buttons">
-            <button id="clickBtn">点击获得经验 (+20)</button>
-            <button id="levelUpBtn" disabled>升级 (需要100经验)</button>
-            <button id="autoBtn">开启挂机模式</button>
-        </div>
-        
-  
+        .admin-panel {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+     
