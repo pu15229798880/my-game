@@ -2,239 +2,349 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>暗黑挂机点 - 高级版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>挂机升级游戏</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
-        body { 
-            background-color: #0a0a0a; 
-            color: #ffffff; 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
             min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+            color: #ffcc00;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            font-size: 2.5rem;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .stat-item {
+            padding: 10px 20px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+        
+        .buttons {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 25px 15px;
-            overflow-x: hidden;
+            gap: 15px;
+            margin: 30px 0;
         }
-
-        /* 顶部状态栏 */
-        .status-bar { 
-            width: 100%; 
-            max-width: 450px; 
-            display: flex; 
-            justify-content: space-between; 
-            margin-bottom: 35px; 
-            font-size: 20px; 
-            font-weight: 600;
-            letter-spacing: 0.5px;
+        
+        button {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
         }
-
-        /* 经验条容器 */
-        .exp-container {
-            width: 100%;
-            max-width: 450px;
-            margin-bottom: 50px;
+        
+        #clickBtn {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
         }
-        .exp-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 16px;
-            color: #cccccc;
+        
+        #levelUpBtn {
+            background: linear-gradient(to right, #11998e, #38ef7d);
+            box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
         }
-        .exp-bar { 
-            height: 12px; 
-            background-color: #1f1f1f; 
-            border-radius: 6px; 
-            overflow: hidden; 
-            position: relative;
+        
+        #autoBtn {
+            background: linear-gradient(to right, #4A00E0, #8E2DE2);
+            box-shadow: 0 5px 15px rgba(74, 0, 224, 0.4);
         }
-        .exp-fill { 
-            height: 100%; 
-            background: linear-gradient(90deg, #00e5ff, #007bff); 
-            width: 0%; 
-            transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); 
-            border-radius: 6px;
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
-        .exp-glow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background: linear-gradient(90deg, rgba(0,229,255,0.3) 0%, rgba(0,123,255,0) 100%);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.4s ease;
+        
+        button:active {
+            transform: translateY(1px);
         }
-        .exp-bar:hover .exp-glow {
-            opacity: 1;
+        
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
-
-        /* 核心点击区 */
-        .click-area {
-            position: relative;
-            margin-bottom: 60px;
+        
+        .progress-container {
+            margin: 30px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
         }
-        /* 点击按钮 */
-        .click-btn { 
-            width: 220px; 
-            height: 220px; 
-            border-radius: 50%; 
-            background: radial-gradient(circle, #1a1a1a, #0f0f0f); 
-            color: #ffffff; 
-            font-size: 24px; 
-            font-weight: 700; 
-            border: 2px solid #333333;
-            cursor: pointer; 
-            position: relative;
+        
+        .progress-bar {
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
             overflow: hidden;
-            transition: all 0.2s ease;
-            box-shadow: 0 0 25px rgba(0,123,255,0.1);
+            margin-top: 10px;
         }
-        .click-btn:hover {
-            border-color: #007bff;
-            box-shadow: 0 0 35px rgba(0,123,255,0.2);
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #ffcc00, #ff9900);
+            width: 0%;
+            transition: width 0.5s ease;
         }
-        .click-btn:active {
-            transform: scale(0.97);
-            box-shadow: 0 0 20px rgba(0,123,255,0.15);
+        
+        .auto-status {
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: none;
         }
-        /* 点击波纹动画 */
-        .click-ripple {
-            position: absolute;
-            border-radius: 50%;
-            background-color: rgba(0,123,255,0.3);
-            transform: scale(0);
-            animation: ripple 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            pointer-events: none;
+        
+        .auto-status.active {
+            display: block;
         }
-        @keyframes ripple {
-            to {
-                transform: scale(2.5);
-                opacity: 0;
+        
+        .history {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .history h3 {
+            margin-bottom: 10px;
+            color: #ffcc00;
+        }
+        
+        .history-item {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        footer {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>挂机升级游戏</h1>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-label">等级</div>
+                <div class="stat-value" id="level">1</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">经验值</div>
+                <div class="stat-value" id="exp">0</div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div>升级进度: <span id="currentExp">0</span> / <span id="requiredExp">100</span></div>
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button id="clickBtn">点击获得经验 (+20)</button>
+            <button id="levelUpBtn" disabled>升级 (需要100经验)</button>
+            <button id="autoBtn">开启挂机模式</button>
+        </div>
+        
+        <div class="auto-status" id="autoStatus">
+            挂机模式运行中... 每秒获得5点经验
+        </div>
+        
+        <div class="history">
+            <h3>游戏记录</h3>
+            <div id="historyLog"></div>
+        </div>
+        
+        <footer>
+            游戏进度会自动保存到本地存储
+        </footer>
+    </div>
+
+    <script>
+        // 游戏状态
+        const gameState = {
+            level: 1,
+            exp: 0,
+            autoMode: false,
+            history: []
+        };
+
+        // DOM元素
+        const levelElement = document.getElementById('level');
+        const expElement = document.getElementById('exp');
+        const currentExpElement = document.getElementById('currentExp');
+        const requiredExpElement = document.getElementById('requiredExp');
+        const progressBar = document.getElementById('progressBar');
+        const clickBtn = document.getElementById('clickBtn');
+        const levelUpBtn = document.getElementById('levelUpBtn');
+        const autoBtn = document.getElementById('autoBtn');
+        const autoStatus = document.getElementById('autoStatus');
+        const historyLog = document.getElementById('historyLog');
+
+        // 从本地存储加载游戏状态
+        function loadGame() {
+            const savedGame = localStorage.getItem('idleGame');
+            if (savedGame) {
+                const parsedGame = JSON.parse(savedGame);
+                gameState.level = parsedGame.level || 1;
+                gameState.exp = parsedGame.exp || 0;
+                gameState.history = parsedGame.history || [];
+                
+                // 更新历史记录显示
+                updateHistory();
+            }
+            updateUI();
+        }
+
+        // 保存游戏状态到本地存储
+        function saveGame() {
+            localStorage.setItem('idleGame', JSON.stringify(gameState));
+        }
+
+        // 更新UI显示
+        function updateUI() {
+            levelElement.textContent = gameState.level;
+            expElement.textContent = gameState.exp;
+            currentExpElement.textContent = gameState.exp;
+            requiredExpElement.textContent = getRequiredExp();
+            
+            // 更新进度条
+            const progressPercent = (gameState.exp / getRequiredExp()) * 100;
+            progressBar.style.width = `${Math.min(progressPercent, 100)}%`;
+            
+            // 更新升级按钮状态
+            levelUpBtn.disabled = gameState.exp < getRequiredExp();
+            levelUpBtn.textContent = gameState.exp >= getRequiredExp() 
+                ? `升级 (消耗${getRequiredExp()}经验)` 
+                : `升级 (需要${getRequiredExp()}经验)`;
+                
+            // 更新挂机按钮状态
+            autoBtn.textContent = gameState.autoMode ? '关闭挂机模式' : '开启挂机模式';
+            autoStatus.classList.toggle('active', gameState.autoMode);
+        }
+
+        // 计算当前等级需要的经验值
+        function getRequiredExp() {
+            return 100; // 每级固定需要100经验
+        }
+
+        // 添加经验
+        function addExp(amount) {
+            gameState.exp += amount;
+            addToHistory(`获得了 ${amount} 点经验`);
+            updateUI();
+            saveGame();
+        }
+
+        // 升级
+        function levelUp() {
+            if (gameState.exp >= getRequiredExp()) {
+                gameState.exp -= getRequiredExp();
+                gameState.level++;
+                addToHistory(`升级到 ${gameState.level} 级！`);
+                updateUI();
+                saveGame();
             }
         }
 
-        /* 升级按钮 */
-        .level-up-btn {
-            padding: 14px 36px;
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            color: #ffffff;
-            border: none;
-            border-radius: 30px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
-            margin-bottom: 50px;
-        }
-        .level-up-btn:disabled {
-            background: linear-gradient(135deg, #1f3b63, #122640);
-            color: #666666;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        .level-up-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        // 切换挂机模式
+        function toggleAutoMode() {
+            gameState.autoMode = !gameState.autoMode;
+            
+            if (gameState.autoMode) {
+                addToHistory('开启了挂机模式');
+                autoInterval = setInterval(() => {
+                    addExp(5);
+                }, 1000);
+            } else {
+                addToHistory('关闭了挂机模式');
+                clearInterval(autoInterval);
+            }
+            
+            updateUI();
         }
 
-        /* 粒子特效容器 */
-        .particle-container { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            pointer-events: none; 
-            z-index: 10; 
-        }
-        /* 粒子样式 */
-        .particle {
-            position: absolute;
-            color: #00e5ff;
-            font-weight: 600;
-            font-size: 16px;
-            transform: translate(-50%, 0);
-            animation: floatUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            text-shadow: 0 0 8px rgba(0,229,255,0.5);
-        }
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translate(-50%, 0); }
-            100% { opacity: 0; transform: translate(-50%, -60px); }
+        // 添加到历史记录
+        function addToHistory(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            gameState.history.unshift(`${timestamp}: ${message}`);
+            
+            // 限制历史记录数量
+            if (gameState.history.length > 10) {
+                gameState.history.pop();
+            }
+            
+            updateHistory();
         }
 
-        /* 底部功能区 */
-        .func-area {
-            width: 100%;
-            max-width: 450px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-        .func-btn {
-            padding: 10px 22px;
-            background-color: #1f1f1f;
-            color: #cccccc;
-            border: 1px solid #333333;
-            border-radius: 20px;
-            font-size: 15px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .func-btn:hover {
-            background-color: #2a2a2a;
-            color: #ffffff;
-            border-color: #444444;
+        // 更新历史记录显示
+        function updateHistory() {
+            historyLog.innerHTML = '';
+            gameState.history.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.textContent = item;
+                historyLog.appendChild(historyItem);
+            });
         }
 
-        /* 弹窗样式 */
-        .modal { 
-            position: fixed; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            background-color: #1a1a1a; 
-            padding: 30px; 
-            border-radius: 12px; 
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5); 
-            z-index: 100; 
-            display: none; 
-            width: 90%;
-            max-width: 400px;
-            border: 1px solid #333333;
-        }
-        .modal h3 { 
-            margin-bottom: 20px; 
-            color: #00e5ff;
-            font-size: 22px;
-            text-align: center;
-            letter-spacing: 0.5px;
-        }
-        .modal p { 
-            margin: 12px 0; 
-            color: #cccccc;
-            font-size: 16px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .modal p span {
-            color: #ffffff;
-            font-weight: 500;
-        }
-        .modal-btn { 
-            margin-top: 25px; 
-            padding: 12px 0;
-            width: 100%;
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            color: #ffffff; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer;
-            font-size: 17px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-       
+        // 事件监听
+        clickBtn.addEventListener('click', () => addExp(20));
+        levelUpBtn.addEventListener('click', levelUp);
+        autoBtn.addEventListener('click', toggleAutoMode);
+
+        // 初始化游戏
+        let autoInterval;
+        loadGame();
+    </script>
+</body>
+</html>
